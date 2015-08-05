@@ -2,7 +2,7 @@
 
 shopt -s nocasematch
 
-cmdline='build.sh <db2 install package> [license files...]'
+cmdline='build.sh <db2 install package> <version> [license files...]'
 srcimg=$1
 if [[ -z "$srcimg" ]]; then
   echo missing absolute path to DB2 install package as the first argument
@@ -31,7 +31,7 @@ prod=expc
 if [[ $srcimg =~ DB2_Svr ]]; then
   prod=server
 fi
-tag=$maintainer/db2-$prod
+tag=$maintainer/db2-$prod$2
 
 for arg in "$@"
 do
