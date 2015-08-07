@@ -2,7 +2,7 @@
 
 shopt -s nocasematch
 
-cmdline='build.sh <db2 install package> <version> [license files...]'
+cmdline='build.sh <db2 install package> <tagname:server expc> <version> [license files...]'
 srcimg=$1
 if [[ -z "$srcimg" ]]; then
   echo missing absolute path to DB2 install package as the first argument
@@ -26,12 +26,13 @@ port=50000
 
 baseimg=ubuntu:14.10
 maintainer=bryantsai
+prod=$2
+version=$3
+tag=$maintainer/db2-$prod
 
-prod=expc
-if [[ $srcimg =~ DB2_Svr ]]; then
-  prod=server
-fi
-tag=$maintainer/db2-$prod$2
+shift
+shift
+shift
 
 for arg in "$@"
 do
@@ -60,7 +61,7 @@ ls /tmp/*.lic &> /dev/null && /opt/ibm/db2/V10.5/adm/db2licm -a /tmp/*.lic
 exit
 EOF
 ID=$(docker ps -l|grep $baseimg|awk '{print $1}')
-docker commit --author="$maintainer" $ID $tag
+docker commit --author="$maintainer" $ID $tag:$version
 docker rm $ID
 
-./create-inst.sh $inst $tag
+./create-inst.sh $inst $tag $version
