@@ -24,7 +24,7 @@ fi
 inst=1
 port=50000
 
-baseimg=ubuntu:14.10
+baseimg=java:openjdk-8-jdk
 maintainer=bryantsai
 prod=$2
 version=$3
